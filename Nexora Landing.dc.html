@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#FAFAFA;color:#111;font-family:'Geist','Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:#6C63FF;text-decoration:none}
+a:hover{color:#5850e6}
+::selection{background:rgba(108,99,255,.18)}
+input:focus{border-color:var(--accent,#6C63FF) !important;box-shadow:0 0 0 3px rgba(108,99,255,.12)}
+:focus-visible{outline:2px solid var(--accent,#6C63FF);outline-offset:2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinrev{to{transform:rotate(-360deg)}}
+@keyframes floaty{0%,100%{transform:translateY(-9px)}50%{transform:translateY(9px)}}
+@keyframes floatx{0%,100%{transform:translateX(-14px)}50%{transform:translateX(14px)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:960px){
+ #hero-split{flex-direction:column !important;gap:56px !important}
+ #hero-left,#hero-right{width:100% !important;max-width:none !important}
+ #hero-right{min-height:420px !important}
+ #showcase-split{flex-direction:column !important}
+ #showcase-split>*{width:100% !important}
+}
+@media(max-width:820px){
+ #nav-links{display:none !important}
+ #nav-cta-wrap{display:none !important}
+ #burger{display:flex !important}
+}
+@media(max-width:760px){
+ [data-grid="stats"]{grid-template-columns:repeat(2,1fr) !important}
+}
+@media(max-width:600px){
+ [data-grid="features"]{grid-template-columns:1fr !important}
+ [data-grid="pricing"]{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+<div id="nexora-root" style="position:relative;overflow-x:hidden">
+
+<sc-if value="{{ showWire }}" hint-placeholder-val="{{ true }}">
+  <div aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden">
+    <div id="wire-parallax" style="position:absolute;inset:0;transition:transform .3s ease-out;will-change:transform">
+      <div style="position:absolute;top:1%;left:50%;width:min(660px,108vw);margin-left:-330px;animation:floaty 13s ease-in-out infinite">
+        <div style="transform:rotate(-8deg)"><img src="assets/3dshape.png" alt="" style="display:block;width:100%;height:auto;opacity:.4;filter:grayscale(1) contrast(1.05);animation:spin 60s linear infinite;transform-origin:50% 50%"/></div>
+      </div>
+      <div style="position:absolute;top:24%;left:-70px;width:250px;animation:floatx 16s ease-in-out infinite">
+        <div style="transform:rotate(150deg) scaleX(-1)"><img src="assets/3dshape.png" alt="" style="display:block;width:100%;height:auto;opacity:.3;filter:sepia(1) hue-rotate(212deg) saturate(3.2) brightness(.95);animation:spinrev 44s linear infinite;transform-origin:50% 50%"/></div>
+      </div>
+      <div style="position:absolute;top:41%;right:-140px;width:430px;filter:blur(1.5px);animation:floaty 21s ease-in-out infinite">
+        <div style="transform:rotate(64deg)"><img src="assets/3dshape.png" alt="" style="display:block;width:100%;height:auto;opacity:.16;filter:grayscale(1) contrast(1.05);animation:spin 84s linear infinite;transform-origin:50% 50%"/></div>
+      </div>
+      <div style="position:absolute;top:60%;left:2%;width:200px;animation:floaty 15s ease-in-out infinite">
+        <div style="transform:rotate(-120deg)"><img src="assets/3dshape.png" alt="" style="display:block;width:100%;height:auto;opacity:.34;filter:grayscale(1) contrast(1.05);animation:spinrev 52s linear infinite;transform-origin:50% 50%"/></div>
+      </div>
+      <div style="position:absolute;top:73%;right:8%;width:300px;animation:floatx 19s ease-in-out infinite">
+        <div style="transform:rotate(28deg) scaleX(-1)"><img src="assets/3dshape.png" alt="" style="display:block;width:100%;height:auto;opacity:.26;filter:sepia(1) hue-rotate(212deg) saturate(3) brightness(.95);animation:spin 70s linear infinite;transform-origin:50% 50%"/></div>
+      </div>
+      <div style="position:absolute;top:90%;left:16%;width:170px;filter:blur(1px);animation:floaty 17s ease-in-out infinite">
+        <div style="transform:rotate(-46deg)"><img src="assets/3dshape.png" alt="" style="display:block;width:100%;height:auto;opacity:.2;filter:grayscale(1) contrast(1.05);animation:spinrev 60s linear infinite;transform-origin:50% 50%"/></div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<nav style="position:fixed;top:0;left:0;right:0;z-index:50;height:88px">
+  <div id="nav-bg" style="position:absolute;inset:0;background:rgba(250,250,250,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(17,17,17,.06);opacity:0;transition:opacity .35s ease"></div>
+  <div style="position:relative;height:100%;max-width:1440px;margin:0 auto;padding:0 clamp(24px,6vw,120px);display:flex;align-items:center;justify-content:space-between">
+    <a href="#" onClick="{{ navHome }}" style="display:flex;align-items:center;gap:11px;color:#111;font-weight:600;font-size:19px;letter-spacing:-.02em">
+      <span style="width:24px;height:24px;border-radius:8px;background:#111;display:inline-flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;background:var(--accent,#6C63FF);border-radius:2px;transform:rotate(45deg)"></span></span>
+      Nexora
+    </a>
+    <div id="nav-links" style="display:flex;align-items:center;gap:38px">
+      <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="4">
+        <a href="#" onClick="{{ l.onClick }}" style="color:#4b5563;font-size:15px;font-weight:500;letter-spacing:-.01em;transition:color .2s" style-hover="color:#111">{{ l.label }}</a>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div id="nav-cta-wrap" style="display:flex;align-items:center;gap:22px">
+        <a href="#" onClick="{{ openSignIn }}" style="color:#4b5563;font-size:15px;font-weight:500;transition:color .2s" style-hover="color:#111">Sign in</a>
+        <button onClick="{{ openTrial }}" style="height:44px;padding:0 20px;border:none;background:#111;color:#fff;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-2px);box-shadow:0 12px 28px rgba(17,17,17,.2)">Start free trial</button>
+      </div>
+      <button id="burger" onClick="{{ toggleMenu }}" aria-label="Toggle menu" style="display:none;width:44px;height:44px;align-items:center;justify-content:center;flex-direction:column;gap:5px;background:#fff;border:1px solid rgba(17,17,17,.1);border-radius:12px;cursor:pointer">
+        <span style="width:18px;height:1.6px;background:#111;display:block;border-radius:2px"></span>
+        <span style="width:18px;height:1.6px;background:#111;display:block;border-radius:2px"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;top:88px;left:0;right:0;z-index:49;background:#fff;border-bottom:1px solid rgba(17,17,17,.06);box-shadow:0 24px 60px rgba(15,23,42,.12);padding:12px clamp(24px,6vw,120px) 28px;animation:fadeIn .28s ease both">
+    <div style="display:flex;flex-direction:column">
+      <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="4">
+        <a href="#" onClick="{{ l.onClick }}" style="padding:16px 2px;color:#111;font-size:17px;font-weight:500;border-bottom:1px solid rgba(17,17,17,.05)">{{ l.label }}</a>
+      </sc-for>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">
+        <button onClick="{{ openSignIn }}" style="height:52px;background:#fff;border:1px solid rgba(17,17,17,.12);border-radius:14px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer">Sign in</button>
+        <button onClick="{{ openTrial }}" style="height:52px;background:#111;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer">Start free trial</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<header id="top" style="position:relative;overflow:hidden;padding-top:clamp(150px,17vw,210px);padding-bottom:clamp(64px,9vw,120px)">
+  <div aria-hidden="true" style="position:absolute;top:-8%;left:50%;transform:translateX(-50%);width:min(1200px,130%);height:920px;background:radial-gradient(circle at 50% 32%,rgba(108,99,255,.15),transparent 58%);pointer-events:none;z-index:0"></div>
+
+  <div style="position:relative;z-index:2;max-width:1000px;margin:0 auto;padding:0 clamp(24px,6vw,48px);text-align:center">
+    <div aria-hidden="true" style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:118%;height:150%;background:radial-gradient(ellipse at center,rgba(250,250,250,.92) 0%,rgba(250,250,250,.58) 40%,transparent 68%);pointer-events:none;z-index:-1"></div>
+
+    <div data-reveal style="display:inline-flex;align-items:center;gap:9px;padding:9px 16px;border-radius:999px;background:rgba(255,255,255,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.75);box-shadow:0 8px 30px rgba(15,23,42,.07);font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;color:#4b5563;text-transform:uppercase">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--accent,#6C63FF)"></span>AI Workspace for Modern Teams
+    </div>
+
+    <h1 style="margin:30px 0 0;font-size:clamp(46px,8.2vw,108px);line-height:.98;letter-spacing:-.045em;font-weight:600;color:#111">
+      <span data-reveal data-reveal-delay="0" style="display:inline-block">Intelligence</span> <span data-reveal data-reveal-delay="70" style="display:inline-block">built</span><br/>
+      <span data-reveal data-reveal-delay="130" style="display:inline-block">for</span> <span data-reveal data-reveal-delay="190" style="display:inline-block">teams</span> <span data-reveal data-reveal-delay="250" style="display:inline-block">that</span> <span data-reveal data-reveal-delay="310" style="display:inline-block;background:linear-gradient(115deg,#8B7DFF,var(--accent,#6C63FF) 62%);-webkit-background-clip:text;background-clip:text;color:transparent">move faster.</span>
+    </h1>
+
+    <p data-reveal data-reveal-delay="500" style="margin:26px auto 0;max-width:540px;font-size:clamp(16px,1.5vw,20px);line-height:1.6;color:#6B7280">The intelligent workspace that unifies your docs, tasks, and automations — so your team ships more with less busywork.</p>
+
+    <div data-reveal data-reveal-delay="600" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:36px">
+      <button onClick="{{ openTrial }}" style="height:56px;padding:0 28px;border:none;background:#111;color:#fff;border-radius:16px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(17,17,17,.22)">Start free trial</button>
+      <button onClick="{{ openDemo }}" style="height:56px;padding:0 28px;background:rgba(255,255,255,.6);color:#111;border:1px solid rgba(255,255,255,.8);border-radius:16px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 30px rgba(15,23,42,.06);transition:transform .2s" style-hover="transform:translateY(-2px)">Book demo</button>
+    </div>
+
+    <div data-reveal data-reveal-delay="700" style="margin-top:48px">
+      <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9CA3AF">Trusted by teams at</div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:22px 30px;margin-top:18px">
+        <sc-for list="{{ logos }}" as="lg" hint-placeholder-count="6">
+          <span style="font-size:17px;font-weight:600;letter-spacing:-.02em;color:#9CA3AF">{{ lg }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:2;max-width:1080px;margin:clamp(56px,7vw,92px) auto 0;padding:0 clamp(24px,6vw,48px)">
+    <div id="dash-parallax" style="will-change:transform;transition:transform .3s ease-out">
+      <div data-reveal data-reveal-delay="220" style="padding:clamp(10px,1.4vw,18px);border-radius:32px;background:rgba(255,255,255,.5);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.7);box-shadow:0 40px 120px rgba(15,23,42,.16)">
+        <div style="background:#fff;border:1px solid rgba(17,17,17,.06);border-radius:22px;overflow:hidden">
+            <div style="display:flex;min-height:440px">
+              <div style="width:64px;flex:none;border-right:1px solid rgba(17,17,17,.05);padding:22px 0;display:flex;flex-direction:column;align-items:center;gap:20px;background:#FCFCFD">
+                <span style="width:28px;height:28px;border-radius:9px;background:#111;display:flex;align-items:center;justify-content:center"><span style="width:10px;height:10px;background:var(--accent,#6C63FF);border-radius:2px;transform:rotate(45deg)"></span></span>
+                <span style="width:26px;height:26px;border-radius:8px;background:var(--accent,#6C63FF);opacity:.14"></span>
+                <span style="width:26px;height:26px;border-radius:8px;background:#EEEFF2"></span>
+                <span style="width:26px;height:26px;border-radius:8px;background:#EEEFF2"></span>
+                <span style="width:26px;height:26px;border-radius:8px;background:#EEEFF2"></span>
+                <span style="width:26px;height:26px;border-radius:8px;background:#EEEFF2;margin-top:auto"></span>
+              </div>
+              <div style="flex:1;min-width:0;padding:22px 24px">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <div>
+                    <div style="font-size:12px;color:#9CA3AF">Overview</div>
+                    <div style="font-size:17px;font-weight:600;color:#111;margin-top:3px;letter-spacing:-.02em">Good morning, Alex</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span style="height:30px;padding:0 12px;border-radius:8px;background:#F5F5F7;font-size:12px;color:#6B7280;display:flex;align-items:center">This week</span>
+                    <span style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#8B7DFF)"></span>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px">
+                  <div style="border:1px solid rgba(17,17,17,.06);border-radius:14px;padding:13px">
+                    <div style="font-size:11px;color:#9CA3AF">Revenue</div>
+                    <div style="font-size:19px;font-weight:600;color:#111;margin-top:5px;letter-spacing:-.02em">$48.2k</div>
+                    <div style="font-size:11px;color:#16a34a;margin-top:3px">+12.4%</div>
+                  </div>
+                  <div style="border:1px solid rgba(17,17,17,.06);border-radius:14px;padding:13px">
+                    <div style="font-size:11px;color:#9CA3AF">Active</div>
+                    <div style="font-size:19px;font-weight:600;color:#111;margin-top:5px;letter-spacing:-.02em">3,210</div>
+                    <div style="font-size:11px;color:#16a34a;margin-top:3px">+4.1%</div>
+                  </div>
+                  <div style="border:1px solid rgba(17,17,17,.06);border-radius:14px;padding:13px">
+                    <div style="font-size:11px;color:#9CA3AF">Tasks</div>
+                    <div style="font-size:19px;font-weight:600;color:#111;margin-top:5px;letter-spacing:-.02em">1,204</div>
+                    <div style="font-size:11px;color:#16a34a;margin-top:3px">+8.7%</div>
+                  </div>
+                </div>
+                <div style="margin-top:12px;border:1px solid rgba(17,17,17,.06);border-radius:16px;padding:16px">
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <div style="font-size:13px;font-weight:600;color:#111">Weekly performance</div>
+                    <div style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--accent,#6C63FF)">+18.2%</div>
+                  </div>
+                  <svg viewBox="0 0 480 150" preserveAspectRatio="none" style="width:100%;height:150px;margin-top:12px;display:block">
+                    <defs><linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#6C63FF;stop-opacity:.18"/><stop offset="1" style="stop-color:#6C63FF;stop-opacity:0"/></linearGradient></defs>
+                    <line x1="0" y1="40" x2="480" y2="40" style="stroke:rgba(17,17,17,.05)"/>
+                    <line x1="0" y1="90" x2="480" y2="90" style="stroke:rgba(17,17,17,.05)"/>
+                    <path d="M0,112 C50,102 80,62 130,74 C180,86 210,42 260,54 C310,66 350,26 400,36 C440,42 470,20 480,16 L480,150 L0,150 Z" style="fill:url(#heroFill)"/>
+                    <path d="M0,112 C50,102 80,62 130,74 C180,86 210,42 260,54 C310,66 350,26 400,36 C440,42 470,20 480,16" style="fill:none;stroke:var(--accent,#6C63FF);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"/>
+                    <circle cx="480" cy="16" r="4" style="fill:var(--accent,#6C63FF)"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-reveal data-reveal-delay="300" data-grid="stats" style="margin-top:clamp(28px,3.5vw,44px);display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(17,17,17,.06);border:1px solid rgba(255,255,255,.6);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(15,23,42,.06)">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <div style="background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:clamp(20px,2.4vw,30px) 20px;text-align:center">
+            <div style="font-size:clamp(28px,3vw,40px);font-weight:600;letter-spacing:-.03em;color:#111">
+              <sc-if value="{{ s.isCounter }}" hint-placeholder-val="{{ true }}"><span data-counter="{{ s.target }}" data-dec="{{ s.dec }}" data-suffix="{{ s.suffix }}">{{ s.initText }}</span></sc-if>
+              <sc-if value="{{ s.isStatic }}" hint-placeholder-val="{{ true }}">{{ s.staticText }}</sc-if>
+            </div>
+            <div style="margin-top:6px;font-size:13px;color:#6B7280">{{ s.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features" style="position:relative;z-index:1;padding:clamp(72px,10vw,120px) 0;background:rgba(250,250,250,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
+  <div style="max-width:1440px;margin:0 auto;padding:0 clamp(24px,6vw,120px)">
+    <div data-reveal style="max-width:660px">
+      <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#6C63FF)">What you get</div>
+      <h2 style="font-size:clamp(32px,4.6vw,56px);line-height:1.05;letter-spacing:-.03em;font-weight:600;margin:16px 0 0;color:#111">One workspace.<br/>Every workflow.</h2>
+      <p style="margin:20px 0 0;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:#6B7280;max-width:520px">Nexora replaces the scattered tools your team juggles with a single, intelligent surface.</p>
+    </div>
+    <div data-grid="features" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px">
+      <div data-reveal data-reveal-delay="0" style="background:#fff;border:1px solid rgba(17,17,17,.06);border-radius:28px;padding:40px;box-shadow:0 20px 80px rgba(15,23,42,.05);transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-4px);box-shadow:0 30px 90px rgba(15,23,42,.1)">
+        <div style="width:52px;height:52px;border-radius:16px;background:#F5F5F7;display:flex;align-items:center;justify-content:center">
+          <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:#111;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M13 2 4 14h6l-1 8 9-12h-6l2-8z"/></svg>
+        </div>
+        <h3 style="font-size:22px;font-weight:600;letter-spacing:-.02em;margin:24px 0 0;color:#111">Automate the busywork</h3>
+        <p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:#6B7280">Let AI handle repetitive tasks, updates, and handoffs — so your team stays in flow.</p>
+      </div>
+      <div data-reveal data-reveal-delay="90" style="background:#fff;border:1px solid rgba(17,17,17,.06);border-radius:28px;padding:40px;box-shadow:0 20px 80px rgba(15,23,42,.05);transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-4px);box-shadow:0 30px 90px rgba(15,23,42,.1)">
+        <div style="width:52px;height:52px;border-radius:16px;background:#F5F5F7;display:flex;align-items:center;justify-content:center">
+          <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:#111;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M4 19h16M7 19v-7M12 19V5M17 19v-4"/></svg>
+        </div>
+        <h3 style="font-size:22px;font-weight:600;letter-spacing:-.02em;margin:24px 0 0;color:#111">Decisions with clarity</h3>
+        <p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:#6B7280">Real-time insights turn scattered data into answers your team can act on instantly.</p>
+      </div>
+      <div data-reveal data-reveal-delay="180" style="background:#fff;border:1px solid rgba(17,17,17,.06);border-radius:28px;padding:40px;box-shadow:0 20px 80px rgba(15,23,42,.05);transition:transform .3s,box-shadow .3s" style-hover="transform:translateY(-4px);box-shadow:0 30px 90px rgba(15,23,42,.1)">
+        <div style="width:52px;height:52px;border-radius:16px;background:#F5F5F7;display:flex;align-items:center;justify-content:center">
+          <svg width="24" height="24" viewBox="0 0 24 24" style="fill:none;stroke:#111;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><path d="M12 3 3 8l9 5 9-5-9-5zM3 13l9 5 9-5M3 18l9 5 9-5"/></svg>
+        </div>
+        <h3 style="font-size:22px;font-weight:600;letter-spacing:-.02em;margin:24px 0 0;color:#111">Built for collaboration</h3>
+        <p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:#6B7280">Docs, tasks, and conversations live together, so context is never more than a click away.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="showcase" style="position:relative;z-index:1;padding:clamp(72px,10vw,120px) 0;background:rgba(245,245,247,.66);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
+  <div style="max-width:1440px;margin:0 auto;padding:0 clamp(24px,6vw,120px)">
+    <div id="showcase-split" style="display:flex;gap:clamp(40px,5vw,80px);align-items:center">
+      <div data-reveal style="width:42%;flex:none">
+        <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#6C63FF)">The product</div>
+        <h2 style="font-size:clamp(30px,4.2vw,52px);line-height:1.06;letter-spacing:-.03em;font-weight:600;margin:16px 0 0;color:#111">See everything.<br/>Miss nothing.</h2>
+        <p style="margin:20px 0 0;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:#6B7280;max-width:440px">A single, calm surface where your team's work, data, and automations come together in real time.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:32px">
+          <div style="display:flex;align-items:flex-start;gap:12px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex:none;margin-top:1px;fill:none;stroke:var(--accent,#6C63FF);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"/></svg><span style="font-size:16px;color:#374151">Unified analytics across every project</span></div>
+          <div style="display:flex;align-items:flex-start;gap:12px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex:none;margin-top:1px;fill:none;stroke:var(--accent,#6C63FF);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"/></svg><span style="font-size:16px;color:#374151">AI summaries that surface what matters</span></div>
+          <div style="display:flex;align-items:flex-start;gap:12px"><svg width="20" height="20" viewBox="0 0 24 24" style="flex:none;margin-top:1px;fill:none;stroke:var(--accent,#6C63FF);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"/></svg><span style="font-size:16px;color:#374151">Automations that run while you sleep</span></div>
+        </div>
+        <a href="#features" onClick="{{ gotoFeatures }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:32px;font-size:16px;font-weight:500;color:#111" style-hover="gap:12px">Explore the product <span style="color:var(--accent,#6C63FF)">→</span></a>
+      </div>
+      <div data-reveal data-reveal-delay="120" style="width:58%;flex:none">
+        <div style="background:#fff;border:1px solid rgba(17,17,17,.06);border-radius:28px;box-shadow:0 30px 90px rgba(15,23,42,.1);overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid rgba(17,17,17,.05)">
+            <div style="display:flex;gap:22px;align-items:center">
+              <span style="font-size:15px;font-weight:600;color:#111">Analytics</span>
+              <span style="font-size:14px;color:#9CA3AF">Automations</span>
+              <span style="font-size:14px;color:#9CA3AF">Reports</span>
+            </div>
+            <span style="font-family:'Geist Mono',monospace;font-size:11px;color:#6B7280">Last 30 days</span>
+          </div>
+          <div style="padding:26px 24px">
+            <div style="display:flex;gap:32px;flex-wrap:wrap">
+              <div><div style="font-size:12px;color:#9CA3AF">Total output</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;color:#111;margin-top:4px">12,480</div><div style="font-size:12px;color:#16a34a;margin-top:2px">▲ 18.2% vs last month</div></div>
+              <div><div style="font-size:12px;color:#9CA3AF">Avg. cycle time</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;color:#111;margin-top:4px">2.4d</div><div style="font-size:12px;color:#16a34a;margin-top:2px">▼ 31% faster</div></div>
+              <div><div style="font-size:12px;color:#9CA3AF">Automations run</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;color:#111;margin-top:4px">8,120</div><div style="font-size:12px;color:#9CA3AF;margin-top:2px">this month</div></div>
+            </div>
+            <svg viewBox="0 0 800 220" preserveAspectRatio="none" style="width:100%;height:clamp(180px,22vw,230px);margin-top:24px;display:block">
+              <defs><linearGradient id="showFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:#6C63FF;stop-opacity:.16"/><stop offset="1" style="stop-color:#6C63FF;stop-opacity:0"/></linearGradient></defs>
+              <line x1="0" y1="55" x2="800" y2="55" style="stroke:rgba(17,17,17,.05)"/>
+              <line x1="0" y1="115" x2="800" y2="115" style="stroke:rgba(17,17,17,.05)"/>
+              <line x1="0" y1="175" x2="800" y2="175" style="stroke:rgba(17,17,17,.05)"/>
+              <path d="M0,172 C90,150 130,118 210,128 C290,138 330,72 410,90 C490,108 530,44 610,62 C690,80 750,32 800,22 L800,220 L0,220 Z" style="fill:url(#showFill)"/>
+              <path d="M0,172 C90,150 130,118 210,128 C290,138 330,72 410,90 C490,108 530,44 610,62 C690,80 750,32 800,22" style="fill:none;stroke:var(--accent,#6C63FF);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:clamp(80px,11vw,140px) 0">
+  <div style="max-width:1440px;margin:0 auto;padding:0 clamp(24px,6vw,120px)">
+    <div data-reveal style="max-width:900px;margin:0 auto;text-align:center">
+      <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#6C63FF)">Loved by teams</div>
+      <blockquote style="font-size:clamp(24px,3.6vw,40px);line-height:1.28;letter-spacing:-.02em;font-weight:500;color:#111;margin:28px 0 0">“Nexora replaced five tools and gave us back a day every week. It's the first platform our whole team actually enjoys using.”</blockquote>
+      <div style="margin-top:34px;display:flex;align-items:center;justify-content:center;gap:14px">
+        <span style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#8B7DFF);flex:none"></span>
+        <div style="text-align:left"><div style="font-size:15px;font-weight:600;color:#111">Sarah Chen</div><div style="font-size:14px;color:#6B7280">VP Product, Northwind</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="position:relative;z-index:1;padding:clamp(72px,10vw,120px) 0;background:rgba(245,245,247,.66);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
+  <div style="max-width:1440px;margin:0 auto;padding:0 clamp(24px,6vw,120px)">
+    <div data-reveal style="text-align:center;max-width:640px;margin:0 auto">
+      <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#6C63FF)">Pricing</div>
+      <h2 style="font-size:clamp(32px,4.6vw,56px);line-height:1.05;letter-spacing:-.03em;font-weight:600;margin:16px 0 0;color:#111">Simple, transparent pricing</h2>
+      <p style="margin:18px 0 0;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:#6B7280">Start free. Upgrade when your team is ready. No surprises.</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:30px">
+        <button onClick="{{ toggleAnnual }}" role="switch" style="position:relative;width:208px;height:46px;border:1px solid rgba(17,17,17,.08);background:#fff;border-radius:13px;padding:4px;cursor:pointer;display:flex;font-family:inherit">
+          <span id="pill-knob" style="position:absolute;top:4px;left:4px;width:100px;height:36px;background:#111;border-radius:10px;transition:transform .28s cubic-bezier(.22,1,.36,1);transform:translateX(100px)"></span>
+          <span id="lbl-monthly" style="position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#9CA3AF">Monthly</span>
+          <span id="lbl-annual" style="position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff">Annual</span>
+        </button>
+        <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--accent,#6C63FF);background:rgba(108,99,255,.1);padding:6px 10px;border-radius:999px">Save 20%</span>
+      </div>
+    </div>
+    <div data-grid="pricing" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px;align-items:stretch">
+      <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+        <div data-reveal style="{{ p.cardStyle }}">
+          <sc-if value="{{ p.featured }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:22px;right:22px;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:var(--accent,#6C63FF);color:#fff;padding:5px 10px;border-radius:999px">Most popular</div></sc-if>
+          <div style="font-size:15px;font-weight:600;color:#111">{{ p.name }}</div>
+          <div style="margin-top:6px;font-size:13px;color:#6B7280;min-height:38px;max-width:220px">{{ p.tagline }}</div>
+          <div style="margin-top:16px;display:flex;align-items:baseline;gap:7px">
+            <span style="font-size:46px;font-weight:600;letter-spacing:-.03em;color:#111">{{ p.price }}</span>
+            <span style="font-size:13px;color:#9CA3AF">{{ p.period }}</span>
+          </div>
+          <button onClick="{{ p.onClick }}" style="{{ p.btnStyle }}">{{ p.cta }}</button>
+          <div style="height:1px;background:rgba(17,17,17,.06);margin:26px 0"></div>
+          <div style="display:flex;flex-direction:column;gap:13px">
+            <sc-for list="{{ p.features }}" as="f" hint-placeholder-count="4">
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#374151"><svg width="18" height="18" viewBox="0 0 24 24" style="flex:none;margin-top:1px;fill:none;stroke:var(--accent,#6C63FF);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"/></svg><span>{{ f }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding:clamp(72px,10vw,120px) 0">
+  <div style="max-width:860px;margin:0 auto;padding:0 clamp(24px,6vw,120px)">
+    <div data-reveal>
+      <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#6C63FF)">FAQ</div>
+      <h2 style="font-size:clamp(32px,4.6vw,56px);line-height:1.05;letter-spacing:-.03em;font-weight:600;margin:16px 0 0;color:#111">Questions, answered</h2>
+    </div>
+    <div style="margin-top:44px;border-top:1px solid rgba(17,17,17,.08)">
+      <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
+        <div data-reveal style="border-bottom:1px solid rgba(17,17,17,.08)">
+          <button onClick="{{ f.onClick }}" aria-expanded="{{ f.open }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 2px;background:none;border:none;cursor:pointer;text-align:left;font-family:inherit">
+            <span style="font-size:clamp(17px,2vw,20px);font-weight:500;letter-spacing:-.01em;color:#111">{{ f.q }}</span>
+            <span style="font-size:24px;color:#9CA3AF;flex:none;line-height:1;width:22px;text-align:center">
+              <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">−</sc-if>
+              <sc-if value="{{ f.closed }}" hint-placeholder-val="{{ true }}">+</sc-if>
+            </span>
+          </button>
+          <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:0 2px 28px;max-width:660px;font-size:16px;line-height:1.6;color:#6B7280;animation:fadeIn .4s ease both">{{ f.a }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 0 clamp(72px,10vw,120px)">
+  <div style="max-width:1440px;margin:0 auto;padding:0 clamp(24px,6vw,120px)">
+    <div data-reveal style="position:relative;overflow:hidden;border-radius:36px;padding:clamp(48px,7vw,96px);text-align:center;{{ ctaBg }}">
+      <div aria-hidden="true" style="position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:560px;height:400px;max-width:100%;background:radial-gradient(circle,rgba(139,125,255,.4),transparent 65%);pointer-events:none"></div>
+      <h2 style="position:relative;color:#fff;font-size:clamp(30px,4.6vw,60px);line-height:1.05;letter-spacing:-.03em;font-weight:600;max-width:720px;margin:0 auto">Start building with intelligence today.</h2>
+      <p style="position:relative;color:rgba(255,255,255,.62);font-size:clamp(16px,1.4vw,18px);margin:20px auto 0;max-width:460px">Free for 14 days. No credit card required.</p>
+      <div style="position:relative;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:36px">
+        <button onClick="{{ openTrial }}" style="height:56px;padding:0 28px;background:#fff;color:#111;border:none;border-radius:16px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s" style-hover="transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.35)">Start free trial</button>
+        <button onClick="{{ openDemo }}" style="height:56px;padding:0 28px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:16px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .2s" style-hover="background:rgba(255,255,255,.1)">Book a demo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="border-top:1px solid rgba(17,17,17,.06);padding:64px 0 48px">
+  <div style="max-width:1440px;margin:0 auto;padding:0 clamp(24px,6vw,120px)">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:48px">
+      <div style="max-width:280px">
+        <a href="#" onClick="{{ navHome }}" style="display:flex;align-items:center;gap:11px;color:#111;font-weight:600;font-size:19px;letter-spacing:-.02em">
+          <span style="width:24px;height:24px;border-radius:8px;background:#111;display:inline-flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;background:var(--accent,#6C63FF);border-radius:2px;transform:rotate(45deg)"></span></span>Nexora
+        </a>
+        <p style="margin:18px 0 0;font-size:14px;line-height:1.6;color:#6B7280">The intelligent workspace for modern teams.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:48px 64px">
+        <sc-for list="{{ footerCols }}" as="c" hint-placeholder-count="4">
+          <div>
+            <div style="font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#9CA3AF">{{ c.title }}</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+              <sc-for list="{{ c.links }}" as="lk" hint-placeholder-count="4">
+                <a href="#" onClick="{{ lk.onClick }}" style="font-size:14px;color:#4b5563" style-hover="color:#111">{{ lk.label }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:56px;padding-top:28px;border-top:1px solid rgba(17,17,17,.06);font-size:13px;color:#9CA3AF">
+      <span>© 2026 Nexora, Inc. All rights reserved.</span>
+      <div style="display:flex;gap:22px">
+        <a href="#" onClick="{{ noop }}" style="color:#9CA3AF" style-hover="color:#111">Twitter</a>
+        <a href="#" onClick="{{ noop }}" style="color:#9CA3AF" style-hover="color:#111">LinkedIn</a>
+        <a href="#" onClick="{{ noop }}" style="color:#9CA3AF" style-hover="color:#111">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:100;background:rgba(17,17,17,.42);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .25s ease both">
+    <div onClick="{{ stop }}" style="width:100%;max-width:440px;background:#fff;border-radius:28px;padding:40px;box-shadow:0 40px 120px rgba(15,23,42,.28);position:relative;animation:fadeIn .35s cubic-bezier(.22,1,.36,1) both">
+      <button onClick="{{ closeModal }}" aria-label="Close" style="position:absolute;top:20px;right:20px;width:36px;height:36px;border-radius:50%;border:none;background:#F5F5F7;cursor:pointer;font-size:18px;color:#6B7280;line-height:1;font-family:inherit">×</button>
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:8px 0">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(108,99,255,.12);display:flex;align-items:center;justify-content:center;margin:0 auto"><svg width="28" height="28" viewBox="0 0 24 24" style="fill:none;stroke:var(--accent,#6C63FF);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h3 style="font-size:24px;font-weight:600;letter-spacing:-.02em;margin:22px 0 0;color:#111">{{ successTitle }}</h3>
+          <p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:#6B7280">{{ successMsg }}</p>
+          <button onClick="{{ closeModal }}" style="margin-top:26px;width:100%;height:52px;background:#111;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit">Done</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+        <div style="font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent,#6C63FF)">{{ modalKicker }}</div>
+        <h3 style="font-size:26px;font-weight:600;letter-spacing:-.02em;margin:12px 0 0;color:#111">{{ modalTitle }}</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#6B7280">{{ modalSub }}</p>
+        <form onSubmit="{{ submitForm }}" style="margin-top:24px;display:flex;flex-direction:column;gap:12px">
+          <input type="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com" autoComplete="email" style="height:52px;border:1px solid rgba(17,17,17,.12);border-radius:14px;padding:0 16px;font-size:15px;font-family:inherit;color:#111;outline:none;transition:border-color .2s,box-shadow .2s"/>
+          <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}"><div style="color:#dc2626;font-size:13px">{{ error }}</div></sc-if>
+          <button type="submit" style="height:52px;background:#111;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;transition:transform .2s" style-hover="transform:translateY(-1px)">{{ modalCta }}</button>
+        </form>
+        <p style="margin:16px 0 0;font-size:12px;color:#9CA3AF;text-align:center">No credit card required. Cancel anytime.</p>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: {&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#6C63FF&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},
+  &quot;showWireframe&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Theme&quot;},
+  &quot;ctaTheme&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;dark&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;accent&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}
+}">
+class Component extends DCLogic {
+  state = { menuOpen:false, modalOpen:false, modalType:'trial', annual:true, openFaq:0, email:'', submitted:false, error:'' };
+
+  NAV = [{label:'Product',id:'features'},{label:'Customers',id:'showcase'},{label:'Pricing',id:'pricing'},{label:'FAQ',id:'faq'}];
+  LOGOS = ['Google','Microsoft','Slack','Notion','HubSpot','Linear'];
+  STATS = [
+    {target:5000,dec:0,suffix:'+',label:'Teams onboarded'},
+    {target:98.9,dec:1,suffix:'%',label:'Customer retention'},
+    {target:200,dec:0,suffix:'+',label:'Integrations'},
+    {static:'24/7',label:'Support coverage'},
+  ];
+  PLANS = [
+    {name:'Starter', monthly:0, annual:0, tagline:'For individuals getting started.', cta:'Start free', features:['Up to 3 projects','Basic AI assistant','Community support','1 GB storage'], featured:false},
+    {name:'Team', monthly:24, annual:19, tagline:'For teams that move faster.', cta:'Start free trial', features:['Unlimited projects','Advanced AI workflows','Priority support','100 GB storage','Analytics dashboard'], featured:true},
+    {name:'Enterprise', custom:true, tagline:'For organizations at scale.', cta:'Book a demo', features:['SSO & SAML','Dedicated success manager','Custom integrations','Unlimited storage','99.99% uptime SLA'], featured:false},
+  ];
+  FAQ = [
+    {q:'How is Nexora different from other AI tools?', a:'Nexora unifies your workspace, docs, and automations under one intelligent layer — so context follows you everywhere instead of living in disconnected apps.'},
+    {q:'Do I need a credit card to start?', a:'No. The free plan and 14-day trial require no card. Upgrade only when your team is ready.'},
+    {q:'Is my data secure?', a:'Yes. Data is encrypted in transit and at rest, with SOC 2 Type II compliance and granular access controls on every plan.'},
+    {q:'Can Nexora integrate with our existing stack?', a:'Nexora connects to 200+ tools including Slack, Notion, GitHub, and Google Workspace, with a full API for anything custom.'},
+    {q:'What kind of support is included?', a:'Every plan includes 24/7 support. Team and Enterprise plans add priority routing and a dedicated success manager.'},
+  ];
+
+  componentDidMount(){
+    const root = document.getElementById('nexora-root');
+    this.root = root;
+    this.applyAccent();
+
+    this.io = new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{ if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='none'; this.io.unobserve(e.target); } });
+    }, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
+    root.querySelectorAll('[data-reveal]').forEach(el=>{
+      el.style.opacity='0';
+      el.style.transform='translateY(40px)';
+      el.style.transitionProperty='opacity, transform';
+      el.style.transitionDuration='0.8s';
+      el.style.transitionTimingFunction='cubic-bezier(.22,1,.36,1)';
+      const d=el.getAttribute('data-reveal-delay'); if(d) el.style.transitionDelay=d+'ms';
+      this.io.observe(el);
+    });
+    requestAnimationFrame(()=>{
+      root.querySelectorAll('[data-reveal]').forEach(el=>{
+        const r=el.getBoundingClientRect();
+        if(r.top < window.innerHeight && r.bottom > 0){ el.style.opacity='1'; el.style.transform='none'; this.io.unobserve(el); }
+      });
+    });
+
+    this.cio = new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{ if(e.isIntersecting){ this.animateCounter(e.target); this.cio.unobserve(e.target); } });
+    }, {threshold:0.6});
+    root.querySelectorAll('[data-counter]').forEach(el=>this.cio.observe(el));
+
+    this.mx=0; this.my=0;
+    this.updateWire=()=>{
+      const wp=document.getElementById('wire-parallax');
+      if(wp) wp.style.transform='translate('+(this.mx*20).toFixed(1)+'px, '+(this.my*20).toFixed(1)+'px)';
+    };
+    this.onMove = (ev)=>{
+      this.mx=(ev.clientX/window.innerWidth-0.5)*2; this.my=(ev.clientY/window.innerHeight-0.5)*2;
+      this.updateWire();
+      const dp=document.getElementById('dash-parallax');
+      if(dp) dp.style.transform='translate('+(this.mx*4).toFixed(2)+'px, '+(this.my*4).toFixed(2)+'px)';
+    };
+    if(window.matchMedia('(hover:hover)').matches) window.addEventListener('mousemove', this.onMove);
+
+    this.onScroll = ()=>{ const bg=document.getElementById('nav-bg'); if(bg) bg.style.opacity = window.scrollY>24 ? '1' : '0'; };
+    window.addEventListener('scroll', this.onScroll, {passive:true});
+    this.onScroll();
+
+    this.onKey = (e)=>{ if(e.key==='Escape'){ if(this.state.modalOpen) this.closeModal(); else if(this.state.menuOpen) this.setState({menuOpen:false}); } };
+    window.addEventListener('keydown', this.onKey);
+  }
+
+  componentDidUpdate(prev){ if(prev && prev !== this.props) this.applyAccent(); }
+
+  componentWillUnmount(){
+    window.removeEventListener('mousemove', this.onMove);
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('keydown', this.onKey);
+    if(this.io) this.io.disconnect();
+    if(this.cio) this.cio.disconnect();
+    document.body.style.overflow='';
+  }
+
+  applyAccent(){ if(this.root) this.root.style.setProperty('--accent', this.props.accent || '#6C63FF'); }
+
+  animateCounter(el){
+    const target=parseFloat(el.getAttribute('data-counter'));
+    const dec=parseInt(el.getAttribute('data-dec')||'0',10);
+    const suffix=el.getAttribute('data-suffix')||'';
+    const dur=1600, start=performance.now();
+    const ease=t=>1-Math.pow(1-t,3);
+    const fmt=(v)=>{ let s = dec>0 ? v.toFixed(dec) : String(Math.round(v)); s=s.replace(/\B(?=(\d{3})+(?!\d))/g,','); return s+suffix; };
+    const tick=(now)=>{ const p=Math.min(1,(now-start)/dur); el.textContent=fmt(target*ease(p)); if(p<1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }
+
+  navTo(id){ const el=document.getElementById(id); if(el){ const y=el.getBoundingClientRect().top+window.scrollY-80; window.scrollTo({top:y,behavior:'smooth'}); } this.setState({menuOpen:false}); }
+  navHome=(e)=>{ if(e&&e.preventDefault)e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); this.setState({menuOpen:false}); };
+  gotoFeatures=(e)=>{ if(e&&e.preventDefault)e.preventDefault(); this.navTo('features'); };
+  noop=(e)=>{ if(e&&e.preventDefault)e.preventDefault(); };
+  toggleMenu=()=>this.setState(s=>({menuOpen:!s.menuOpen}));
+
+  openModal(type){ this.setState({modalOpen:true, modalType:type, submitted:false, error:'', email:''}); document.body.style.overflow='hidden'; }
+  openTrial=()=>this.openModal('trial');
+  openDemo=()=>this.openModal('demo');
+  openSignIn=(e)=>{ if(e&&e.preventDefault)e.preventDefault(); this.openModal('signin'); };
+  closeModal=()=>{ this.setState({modalOpen:false}); document.body.style.overflow=''; };
+  stop=(e)=>e.stopPropagation();
+  setEmail=(e)=>this.setState({email:e.target.value, error:''});
+  submitForm=(e)=>{ e.preventDefault(); const em=(this.state.email||'').trim(); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ this.setState({error:'Please enter a valid email address.'}); return; } this.setState({submitted:true, error:''}); };
+
+  toggleAnnual=()=>{
+    const a=!this.state.annual; this.setState({annual:a});
+    const k=document.getElementById('pill-knob'), m=document.getElementById('lbl-monthly'), an=document.getElementById('lbl-annual');
+    if(k) k.style.transform = a ? 'translateX(100px)' : 'translateX(0)';
+    if(m) m.style.color = a ? '#9CA3AF' : '#fff';
+    if(an) an.style.color = a ? '#fff' : '#9CA3AF';
+  };
+  toggleFaq(i){ this.setState(s=>({openFaq: s.openFaq===i ? -1 : i})); }
+
+  renderVals(){
+    const annual=this.state.annual;
+    const fmtInit=(t,dec,suf)=>{ let s = dec>0 ? t.toFixed(dec) : String(t); s=s.replace(/\B(?=(\d{3})+(?!\d))/g,','); return s+suf; };
+    const stats=this.STATS.map(s=> s.static
+      ? {isCounter:false, isStatic:true, staticText:s.static, label:s.label}
+      : {isCounter:true, isStatic:false, target:s.target, dec:s.dec, suffix:s.suffix, initText:fmtInit(s.target,s.dec,s.suffix), label:s.label});
+
+    const plans=this.PLANS.map(p=>{
+      let price, period;
+      if(p.custom){ price='Custom'; period=''; }
+      else { const v=annual?p.annual:p.monthly; price = v===0 ? '$0' : '$'+v; period = v===0 ? 'free forever' : 'per user / mo'; }
+      const btnStyle = (p.featured
+        ? 'background:#111;color:#fff;border:none;'
+        : 'background:#fff;color:#111;border:1px solid rgba(17,17,17,.14);')
+        + 'width:100%;height:50px;margin-top:22px;border-radius:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:transform .2s';
+      const cardStyle = 'position:relative;display:flex;flex-direction:column;background:#fff;border-radius:28px;padding:36px;'
+        + (p.featured ? 'border:1.5px solid var(--accent,#6C63FF);box-shadow:0 30px 90px rgba(108,99,255,.16)' : 'border:1px solid rgba(17,17,17,.06);box-shadow:0 20px 80px rgba(15,23,42,.05)');
+      return {name:p.name, tagline:p.tagline, cta:p.cta, features:p.features, featured:p.featured, price, period, btnStyle, cardStyle, onClick: p.custom ? this.openDemo : this.openTrial};
+    });
+
+    const faqs=this.FAQ.map((f,i)=>({q:f.q, a:f.a, open:i===this.state.openFaq, closed:i!==this.state.openFaq, onClick:()=>this.toggleFaq(i)}));
+
+    const navLinks=this.NAV.map(n=>({label:n.label, onClick:(e)=>{ if(e&&e.preventDefault)e.preventDefault(); this.navTo(n.id); }}));
+
+    const footerCols=[
+      {title:'Product', links:[{label:'Features',id:'features'},{label:'Pricing',id:'pricing'},{label:'Customers',id:'showcase'},{label:'Changelog',id:''}]},
+      {title:'Company', links:[{label:'About',id:''},{label:'Careers',id:''},{label:'Blog',id:''},{label:'Contact',id:''}]},
+      {title:'Resources', links:[{label:'Docs',id:''},{label:'API',id:''},{label:'Community',id:''},{label:'Support',id:'faq'}]},
+      {title:'Legal', links:[{label:'Privacy',id:''},{label:'Terms',id:''},{label:'Security',id:''}]},
+    ].map(c=>({title:c.title, links:c.links.map(l=>({label:l.label, onClick:(e)=>{ if(e&&e.preventDefault)e.preventDefault(); if(l.id) this.navTo(l.id); }}))}));
+
+    const MT={
+      trial:{kicker:'Free trial', title:'Start your free trial', sub:'14 days of Nexora, on us. No credit card required.', cta:'Start free trial', st:'Check your inbox'},
+      demo:{kicker:'Book a demo', title:'See Nexora in action', sub:'Get a personalized walkthrough with our team.', cta:'Request demo', st:'Request received'},
+      signin:{kicker:'Welcome back', title:'Sign in to Nexora', sub:'Enter your email and we\u2019ll send you a magic link.', cta:'Continue', st:'Check your inbox'},
+    };
+    const m=MT[this.state.modalType]||MT.trial;
+    const successMsg = this.state.modalType==='demo'
+      ? 'Our team will reach out to '+(this.state.email||'you')+' within one business day.'
+      : 'We sent a secure link to '+(this.state.email||'your inbox')+'. Follow it to continue.';
+
+    const ctaBg = (this.props.ctaTheme==='accent')
+      ? 'background:var(--accent,#6C63FF)'
+      : 'background:#111';
+
+    return {
+      navLinks, logos:this.LOGOS, stats, plans, faqs, footerCols,
+      menuOpen:this.state.menuOpen, modalOpen:this.state.modalOpen,
+      submitted:this.state.submitted, notSubmitted:!this.state.submitted,
+      email:this.state.email, error:this.state.error,
+      modalKicker:m.kicker, modalTitle:m.title, modalSub:m.sub, modalCta:m.cta,
+      successTitle:m.st, successMsg,
+      showWire: this.props.showWireframe !== false,
+      ctaBg,
+      navHome:this.navHome, gotoFeatures:this.gotoFeatures, noop:this.noop,
+      toggleMenu:this.toggleMenu, openTrial:this.openTrial, openDemo:this.openDemo, openSignIn:this.openSignIn,
+      closeModal:this.closeModal, stop:this.stop, setEmail:this.setEmail, submitForm:this.submitForm,
+      toggleAnnual:this.toggleAnnual,
+    };
+  }
+}
+</script>
+</body>
+</html>
